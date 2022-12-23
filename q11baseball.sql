@@ -1,3 +1,4 @@
+Question 11 
 
 SELECT  t.teamid,  
 	    t.w,
@@ -11,3 +12,5 @@ AND t.teamid = s.teamid
 WHERE t.yearid >= 2000
 GROUP by t.teamid, t.w, t.yearid
 ORDER BY t.teamid, t.yearid
+
+

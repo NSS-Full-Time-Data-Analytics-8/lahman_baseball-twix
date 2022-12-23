@@ -26,4 +26,4 @@ INNER JOIN pitching AS pi
 USING (playerid)
 WHERE throws IS NOT NULL
 ORDER BY throws;
---347total(71%) (141total L(29%)
+--HOF: 488 total, 347 R(71%) 141 L(29%)

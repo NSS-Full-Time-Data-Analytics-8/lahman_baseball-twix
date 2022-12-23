@@ -1,9 +1,9 @@
-select playerid, COUNT(playerid)
-from awardsmanagers as A
-where awardid = 'TSN Manager of the Year'
+SELECT playerid, COUNT(playerid)
+FROM awardsmanagers as A
+WHERE awardid = 'TSN Manager of the Year'
 AND lgid <> 'ML'
-group by playerid
-HAVING count(playerid) >=2;
+GROUP BY playerid
+HAVING COUNT(playerid) >=2;
 --Davey Johnson: 1997 Baltimore (AL), 2012 Washington (NL)
 --Jim Leyland: 1988-1990-1992 Pittsburgh (NL), 2006 Detroit (AL)
 --See below for logic (lol)
@@ -37,13 +37,13 @@ WHERE playerid = 'johnsda02';
 SELECT teamid
 FROM managers
 WHERE playerid = 'johnsda02';
-and yearid = 1997;
+AND yearid = 1997;
 --BAL (AL)
 
 SELECT teamid
 FROM managers
 WHERE playerid = 'johnsda02'
-and yearid = 2012;
+AND yearid = 2012;
 --WAS (NL)
 
 SELECT lgid, playerid, yearid, awardid
@@ -96,13 +96,13 @@ WHERE playerid = 'leylaji99';
 SELECT teamid
 FROM managers
 WHERE playerid = 'leylaji99'
-and yearid IN (1988, 1990, 1992);
+AND yearid IN (1988, 1990, 1992);
 --Pittsburgh
 
 SELECT teamid
 FROM managers
 WHERE playerid = 'leylaji99'
-and yearid = '2006';
+AND yearid = '2006';
 --Detroit
 
 SELECT lgid, playerid, yearid, awardid
@@ -118,3 +118,24 @@ WHERE lgid <> 'ML'
 AND awardid = 'TSN Manager of the Year'
 AND playerid = 'coxbo01';
 --no
+
+WITH dual_league AS	(SELECT playerid, COUNT(DISTINCT awardid)
+					FROM awardsmanagers
+					WHERE lgid <> 'ML'
+					 	AND awardid ='TSN Manager of the Year'
+					GROUP BY playerid
+					HAVING COUNT(DISTINCT lgid) >1)
+SELECT DISTINCT
+	namefirst, 
+	namelast, 
+	yearid,
+	name
+FROM awardsmanagers
+	INNER JOIN people
+	USING(playerid)
+	INNER JOIN dual_league
+	USING(playerid)
+	INNER JOIN managers
+	USING(playerid, yearid)
+	INNER JOIN teams
+	USING(teamid, yearid);
